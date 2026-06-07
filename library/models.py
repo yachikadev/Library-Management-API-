@@ -36,3 +36,13 @@ class Member(models.Model):
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='member')
     membership_type = models.CharField(max_length=10, choices=MEMBERSHIP_CHOICES, default='basic')
+class IssuedBook(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='issued_books')
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='issued_books')
+    issued_date = models.DateField(auto_now_add=True)
+    due_date = models.DateField()
+    return_date = models.DateField(null=True, blank=True)
+    fine_amount = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
+
+    def __str__(self):
+        return f"{self.member} - {self.book}"
